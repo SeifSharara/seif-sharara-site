@@ -18,8 +18,23 @@ window.SITE_CONFIG = {
   state: "Virginia",
   // Leave blank until a public street address is ready to publish.
   streetAddress: "",
-  effectiveDate: "[EFFECTIVE DATE — UPDATE BEFORE LAUNCH]",
+  effectiveDate: "September 4, 2026",
   currentYear: "2026",
+
+  /**
+   * IVR / A2P CAMPAIGN SETTINGS
+   * ===========================
+   * ivrPhone: The exact phone number tied to the live SMS-consent IVR flow
+   *   (the GHL/campaign number). This is the ONLY place to update it — the
+   *   "A2P Reviewer Verification" card on /sms-consent/ reads this value
+   *   automatically via inline script.
+   * ivrStatus: Either "live" or "pre-launch". Controls the status badge and
+   *   wording in the "A2P Reviewer Verification" section on /sms-consent/.
+   *   Switch to "live" only once the IVR flow is actually configured and
+   *   answering calls in production for this campaign.
+   */
+  ivrPhone: "(857) 837-6539",
+  ivrStatus: "live",
 };
 
 /**

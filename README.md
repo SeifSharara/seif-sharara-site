@@ -48,29 +48,49 @@ Almost everything is centralized in **`js/config.js`** — edit the values in
   contact section will automatically fall back to "City, State" only)
 - `effectiveDate`
 - `currentYear`
+- `ivrPhone` — the exact phone number tied to the live SMS-consent IVR flow
+  (the GHL/campaign number). This is read automatically by the
+  "A2P Reviewer Verification" card on `/sms-consent/` — update it in this
+  one place only.
+- `ivrStatus` — set to `"live"` once the IVR flow is actually configured and
+  answering calls in production for this campaign, or leave as
+  `"pre-launch"` until then. This automatically switches the status badge
+  and wording on `/sms-consent/` between "IVR Pre-Launch" and "IVR Live."
 
-This file drives the shared header and footer on every page automatically.
+This file drives the shared header and footer, plus the reviewer
+verification card, on every page automatically.
 
 **Important:** because this is plain HTML with no templating engine, the
-placeholders `[YOUR EMAIL]` and `[YOUR CONTACT PHONE NUMBER]` are also
-written directly into the visible body copy of these files (contact section,
-legal pages):
+business email and phone number are also written directly into the visible
+body copy of these files (contact section, legal pages):
 
 - `index.html`
 - `privacy/index.html`
 - `terms/index.html`
 
-Search for `[YOUR EMAIL]` and `[YOUR CONTACT PHONE NUMBER]` across the repo
-and replace every instance — in `js/config.js` **and** in the HTML files
-above — so the site is consistent everywhere.
-
-Also replace `[EFFECTIVE DATE — UPDATE BEFORE LAUNCH]` in `privacy/index.html`,
-`terms/index.html`, and `js/config.js` (`effectiveDate`) with the actual
-effective date once finalized.
+If you change the email or general business phone number, update `js/config.js`
+**and** search for the old value in the HTML files above so the site stays
+consistent everywhere. (The IVR-specific phone number on `/sms-consent/` does
+**not** need manual updates — it's injected from `ivrPhone` automatically.)
 
 The placeholder favicon (`images/favicon.png`) and Open Graph image
 (`images/og-image.png`) are solid-color placeholders — replace with real
 brand assets when available.
+
+### IVR configuration evidence image
+
+The "IVR Configuration Evidence" section on `/sms-consent/` displays:
+
+- `images/ivr-verbal-consent-evidence.png` — a single combined evidence
+  diagram showing the exact IVR disclosure, the phone-based consent flow,
+  and the underlying HighLevel IVR configuration (including the key-press-1
+  → SMS Consent branch).
+
+If this file is ever missing, the page automatically shows a clean
+"Configuration screenshot to be added before campaign resubmission"
+placeholder instead of a broken image icon. To update the evidence image,
+just replace the file at that path with the same filename — no HTML changes
+needed.
 
 ## 4. URLs for A2P registration
 
@@ -81,20 +101,25 @@ Once deployed, use:
 - **Privacy Policy URL:** `https://<your-domain>/privacy/`
 - **Terms & Conditions URL:** `https://<your-domain>/terms/`
 
-## 5. Pre-submission checklist
+## 5. A2P resubmission checklist
 
-- [ ] All `[YOUR EMAIL]` placeholders replaced with a real email
-- [ ] All `[YOUR CONTACT PHONE NUMBER]` placeholders replaced with a real phone number
-- [ ] `[EFFECTIVE DATE — UPDATE BEFORE LAUNCH]` replaced on Privacy and Terms pages
-- [ ] Website is publicly accessible (deployed, not just local)
+Use this checklist before resubmitting the campaign for review (e.g. after
+an error 30909 CTA verification rejection):
+
 - [ ] Business name on the site matches the A2P registration exactly: "Seif Sharara"
-- [ ] Contact information is real and monitored
-- [ ] SMS Consent page is public and reachable at `/sms-consent/`
-- [ ] Privacy Policy is public and reachable at `/privacy/`
-- [ ] Terms & Conditions are public and reachable at `/terms/`
+- [ ] `ivrPhone` in `js/config.js` is the correct, real business/campaign phone number
+- [ ] `/sms-consent/` (IVR consent page) is public and reachable
+- [ ] The IVR disclosure text on `/sms-consent/` matches the actual GHL/IVR workflow exactly
+- [ ] Press 1 is confirmed as the affirmative consent action in the live workflow
+- [ ] The live workflow does not send SMS unless the caller pressed 1
+- [ ] IVR configuration evidence image present at `images/ivr-verbal-consent-evidence.png`
+- [ ] Privacy Policy effective date is current
+- [ ] Terms & Conditions effective date is current
+- [ ] Privacy Policy (`/privacy/`) and Terms (`/terms/`) are public
+- [ ] STOP / HELP / rates / frequency disclosures are present on `/sms-consent/`, `/privacy/`, and `/terms/`
+- [ ] No contradictory marketing-consent language exists anywhere on the site
+- [ ] Homepage contact details (email, phone, location) are accurate
 - [ ] All internal links work (header, footer, in-page links)
-- [ ] No fake claims, testimonials, client counts, or statistics anywhere on the site
-- [ ] No purchased/rented/affiliate lead-list language anywhere
-- [ ] Mobile layout verified (navigation menu, spacing, readability)
-- [ ] Canonical/OG URLs and `sitemap.xml` updated to the final domain
-- [ ] Favicon and OG image replaced with real brand assets (optional but recommended)
+- [ ] Site works on mobile (nav menu, spacing, readability)
+- [ ] No placeholder text remains anywhere (search for `[` and `]`)
+- [ ] `ivrStatus` in `js/config.js` reflects reality — `"live"` only if the IVR is actually answering calls in production, otherwise `"pre-launch"`
